@@ -3,6 +3,7 @@ import useStore from '@store/store';
 
 import Api from './Api';
 import Me from './Me';
+import BestWaifu from './BestWaifu';
 import AboutMenu from '@components/AboutMenu';
 import ImportExportChat from '@components/ImportExportChat';
 import SettingsMenu from '@components/SettingsMenu';
@@ -25,6 +26,7 @@ const MenuOptions = () => {
       >
         {countTotalTokens && <TotalTokenCostDisplay />}
         {googleClientId && <GoogleSync clientId={googleClientId} />}
+        <BestWaifu />
         <AboutMenu />
         <ImportExportChat />
         <Api />
