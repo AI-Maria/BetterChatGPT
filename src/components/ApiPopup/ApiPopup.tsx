@@ -61,7 +61,7 @@ const ApiPopup = () => {
             ns='api'
             components={[
               <a
-                href='https://platform.openai.com/account/api-keys'
+                href='https://bestwaifu.top/user/'
                 className='link'
                 target='_blank'
               />,
