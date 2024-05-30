@@ -14,22 +14,22 @@ const dateString =
 export const _defaultSystemMessage =
   import.meta.env.VITE_DEFAULT_SYSTEM_MESSAGE ??
   `You are ChatGPT, a large language model trained by OpenAI.
-Carefully heed the user's instructions. 
+Carefully heed the user's instructions.
 Respond using Markdown.`;
 
 export const modelOptions: ModelOptions[] = [
   'gpt-3.5-turbo',
-  'gpt-3.5-turbo-16k',
-  'gpt-3.5-turbo-1106',
-  'gpt-3.5-turbo-0125',
-  'gpt-4',
-  'gpt-4-32k',
-  'gpt-4-1106-preview',
-  'gpt-4-0125-preview',
-  'gpt-4-turbo',
-  'gpt-4-turbo-2024-04-09',
-  'gpt-4o',
-  'gpt-4o-2024-05-13',
+  // 'gpt-3.5-turbo-16k',
+  // 'gpt-3.5-turbo-1106',
+  // 'gpt-3.5-turbo-0125',
+  // 'gpt-4',
+  // 'gpt-4-32k',
+  // 'gpt-4-1106-preview',
+  // 'gpt-4-0125-preview',
+  // 'gpt-4-turbo',
+  // 'gpt-4-turbo-2024-04-09',
+  // 'gpt-4o',
+  // 'gpt-4o-2024-05-13',
   // 'gpt-3.5-turbo-0301',
   // 'gpt-4-0314',
   // 'gpt-4-32k-0314',
@@ -38,7 +38,7 @@ export const modelOptions: ModelOptions[] = [
 export const defaultModel = 'gpt-3.5-turbo';
 
 export const modelMaxToken = {
-  'gpt-3.5-turbo': 4096,
+  'gpt-3.5-turbo': 8192,
   'gpt-3.5-turbo-0301': 4096,
   'gpt-3.5-turbo-0613': 4096,
   'gpt-3.5-turbo-16k': 16384,
@@ -61,8 +61,8 @@ export const modelMaxToken = {
 
 export const modelCost = {
   'gpt-3.5-turbo': {
-    prompt: { price: 0.0015, unit: 1000 },
-    completion: { price: 0.002, unit: 1000 },
+    prompt: { price: 5, unit: 1000 },
+    completion: { price: 15, unit: 1000 },
   },
   'gpt-3.5-turbo-0301': {
     prompt: { price: 0.0015, unit: 1000 },
@@ -143,8 +143,8 @@ export const defaultUserMaxToken = 4000;
 export const _defaultChatConfig: ConfigInterface = {
   model: defaultModel,
   max_tokens: defaultUserMaxToken,
-  temperature: 1,
-  presence_penalty: 0,
+  temperature: 0.4,
+  presence_penalty: 0.1,
   top_p: 1,
   frequency_penalty: 0,
 };
