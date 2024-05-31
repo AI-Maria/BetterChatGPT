@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import {
+    ContentInterface,
   Folder,
   FolderCollection,
   LocalStorageInterfaceV0ToV1,
@@ -104,3 +105,19 @@ export const migrateV7 = (persistedState: LocalStorageInterfaceV7oV8) => {
     chat.id = uuidv4();
   });
 };
+
+export const migrateV8 = (persistedState: LocalStorageInterfaceV7oV8) => {
+  persistedState.chats.forEach((chat) => {
+    chat.messages.forEach((message) => {
+      // Check if the old content structure exists
+      if (typeof message.content === 'string') {
+        // Convert the old content string to the new content array structure
+        message.content = [{
+          type: 'text', // assuming all old content is of type 'text'
+          text: message.content
+        }] as ContentInterface[];
+      }
+    });
+  });
+};
+

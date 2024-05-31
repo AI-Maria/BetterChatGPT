@@ -19,6 +19,7 @@ Respond using Markdown.`;
 
 export const modelOptions: ModelOptions[] = [
   'gpt-3.5-turbo',
+  'gpt-4-vision-preview',
   // 'gpt-3.5-turbo-16k',
   // 'gpt-3.5-turbo-1106',
   // 'gpt-3.5-turbo-0125',
@@ -130,30 +131,7 @@ type ModelTypes = {
 // Types of input the model can support. If image, show an image upload button
 export const modelTypes: ModelTypes = {
   'gpt-3.5-turbo': 'text',
-  'gpt-3.5-turbo-16k': 'text',
-  'gpt-3.5-turbo-1106': 'text',
-  'gpt-3.5-turbo-0125': 'text',
-  'gpt-4': 'text',
-  'gpt-4-32k': 'text',
-  'gpt-4-1106-preview': 'text',
-  'gpt-4-0125-preview': 'text',
   'gpt-4-vision-preview': 'image'
-  'gpt-4-turbo': {
-    prompt: { price: 0.01, unit: 1000 },
-    completion: { price: 0.03, unit: 1000 },
-  },
-  'gpt-4-turbo-2024-04-09': {
-    prompt: { price: 0.01, unit: 1000 },
-    completion: { price: 0.03, unit: 1000 },
-  },
-  'gpt-4o': {
-    prompt: { price: 0.005, unit: 1000 },
-    completion: { price: 0.015, unit: 1000 },
-  },
-  'gpt-4o-2024-05-13': {
-    prompt: { price: 0.005, unit: 1000 },
-    completion: { price: 0.015, unit: 1000 },
-  },
 };
 
 export const defaultUserMaxToken = 4000;

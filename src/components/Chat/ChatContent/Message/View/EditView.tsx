@@ -243,7 +243,7 @@ const EditViewButtons = memo(
     const { t } = useTranslation();
     const generating = useStore.getState().generating;
     const advancedMode = useStore((state) => state.advancedMode);
-    const model = useStore((state) => state.chats![state.currentChatIndex].config.model);
+    const model = useStore((state) => state.chats != undefined ? state.chats![state.currentChatIndex].config.model : "");
     const fileInputRef = useRef(null);
 
     const handleUploadButtonClick = () => {
@@ -291,7 +291,7 @@ const EditViewButtons = memo(
                 <FolderIcon />
               </div>
             </button>
-            
+
             </div>
 
             {/* Hidden file input */}
