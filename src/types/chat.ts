@@ -27,6 +27,11 @@ export interface ContentInterface {
   type: Content;
 }
 
+export interface MessageInterfaceText {
+  role: Role;
+  content: String;
+}
+
 export interface MessageInterface {
   role: Role;
   content: ContentInterface[];

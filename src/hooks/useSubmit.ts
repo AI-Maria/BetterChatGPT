@@ -1,7 +1,7 @@
 import React from 'react';
 import useStore from '@store/store';
 import { useTranslation } from 'react-i18next';
-import { ChatInterface, MessageInterface, TextContentInterface } from '@type/chat';
+import { ChatInterface, ContentInterface, MessageInterface, TextContentInterface } from '@type/chat';
 import { getChatCompletion, getChatCompletionStream } from '@api/api';
 import { parseEventSource } from '@api/helper';
 import { limitMessageTokens, updateTotalTokenUsed } from '@utils/messageUtils';
@@ -168,17 +168,30 @@ const useSubmit = () => {
         currChats &&
         !currChats[currentChatIndex]?.titleSet
       ) {
+        function extractContentMessages(contents : ContentInterface[]) {
+          return contents.map(content => {
+            if (content.type === 'text') {
+              return content.text;
+            } else if (content.type === 'image_url') {
+              return '(image)';
+            }
+              return '';
+          }).join(' ');
+        }
         const messages_length = currChats[currentChatIndex].messages.length;
         const assistant_message =
           currChats[currentChatIndex].messages[messages_length - 1].content;
         const user_message =
           currChats[currentChatIndex].messages[messages_length - 2].content;
 
+        const assistant_content_string = extractContentMessages(assistant_message);
+        const user_content_string = extractContentMessages(user_message);
+
         const message: MessageInterface = {
           role: 'user',
           content: [{
             type: 'text',
-            text: `Generate a title in less than 6 words for the following message (language: ${i18n.language}):\n"""\nUser: ${user_message}\nAssistant: ${assistant_message}\n"""`,
+            text: `Generate a title in less than 6 words for the following message (language: ${i18n.language}):\n"""\nUser: ${user_content_string}\nAssistant: ${assistant_content_string}\n"""`,
           } as TextContentInterface]
         };
 
