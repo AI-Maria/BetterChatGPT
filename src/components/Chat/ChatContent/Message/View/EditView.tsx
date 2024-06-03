@@ -283,11 +283,11 @@ const EditViewButtons = memo(
               ))}
 
             <button
-              className='btn relative btn-neutral h-10'
+              className='btn relative btn-neutral h-16 w-16'
               onClick={handleUploadButtonClick}
               aria-label={'Upload Images'}
             >
-              <div className='flex items-center justify-center gap-2'>
+              <div className='flex items-center justify-center gap-2 h-full w-full'>
                 <FolderIcon />
               </div>
             </button>
