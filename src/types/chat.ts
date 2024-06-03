@@ -1,12 +1,40 @@
 import { Prompt } from './prompt';
 import { Theme } from './theme';
 
+// The types in this file must mimick the structure of the the API request
+
+export type Content = 'text' | 'image_url';
+export type ImageDetail = 'low' | 'high' | 'auto';
+export const imageDetails: ImageDetail[] = ['low', 'high', 'auto'];
 export type Role = 'user' | 'assistant' | 'system';
 export const roles: Role[] = ['user', 'assistant', 'system'];
 
+export interface ImageContentInterface extends ContentInterface {
+  type: 'image_url';
+  image_url: {
+    url: string; // base64 or image URL
+    detail: ImageDetail;
+  }
+}
+
+export interface TextContentInterface extends ContentInterface {
+  type: 'text';
+  text: string;
+}
+
+export interface ContentInterface {
+  [x: string]: any;
+  type: Content;
+}
+
+export interface MessageInterfaceText {
+  role: Role;
+  content: String;
+}
+
 export interface MessageInterface {
   role: Role;
-  content: string;
+  content: ContentInterface[];
 }
 
 export interface ChatInterface {
@@ -61,10 +89,13 @@ export type ModelOptions =
   | 'gpt-3.5-turbo'
   | 'gpt-3.5-turbo-16k'
   | 'gpt-3.5-turbo-1106'
-  | 'gpt-3.5-turbo-0125';
+  | 'gpt-3.5-turbo-0125'
+  | 'gpt-4-vision-preview';
 // | 'gpt-3.5-turbo-0301';
 // | 'gpt-4-0314'
 // | 'gpt-4-32k-0314'
+
+export type ModelType = 'text' | 'image';
 
 export type TotalTokenUsed = {
   [model in ModelOptions]?: {
@@ -159,3 +190,8 @@ export interface LocalStorageInterfaceV7oV8
   foldersExpanded: boolean[];
   folders: FolderCollection;
 }
+
+export interface LocalStorageInterfaceV8oV9
+  extends LocalStorageInterfaceV7oV8 {
+}
+

@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ChatInterface, ConfigInterface, ModelOptions } from '@type/chat';
+import { ChatInterface, ConfigInterface, ModelOptions, ModelType, TextContentInterface } from '@type/chat';
 import useStore from '@store/store';
 
 const date = new Date();
@@ -19,6 +19,7 @@ Respond using Markdown.`;
 
 export const modelOptions: ModelOptions[] = [
   'gpt-3.5-turbo',
+  'gpt-4-vision-preview',
   // 'gpt-3.5-turbo-16k',
   // 'gpt-3.5-turbo-1106',
   // 'gpt-3.5-turbo-0125',
@@ -53,10 +54,7 @@ export const modelMaxToken = {
   'gpt-4-32k-0613': 32768,
   'gpt-4-1106-preview': 128000,
   'gpt-4-0125-preview': 128000,
-  'gpt-4-turbo': 128000,
-  'gpt-4-turbo-2024-04-09': 128000,
-  'gpt-4o': 128000,
-  'gpt-4o-2024-05-13': 128000,
+  'gpt-4-vision-preview': 4096
 };
 
 export const modelCost = {
@@ -120,22 +118,20 @@ export const modelCost = {
     prompt: { price: 0.01, unit: 1000 },
     completion: { price: 0.03, unit: 1000 },
   },
-  'gpt-4-turbo': {
+  'gpt-4-vision-preview': {
     prompt: { price: 0.01, unit: 1000 },
     completion: { price: 0.03, unit: 1000 },
-  },
-  'gpt-4-turbo-2024-04-09': {
-    prompt: { price: 0.01, unit: 1000 },
-    completion: { price: 0.03, unit: 1000 },
-  },
-  'gpt-4o': {
-    prompt: { price: 0.005, unit: 1000 },
-    completion: { price: 0.015, unit: 1000 },
-  },
-  'gpt-4o-2024-05-13': {
-    prompt: { price: 0.005, unit: 1000 },
-    completion: { price: 0.015, unit: 1000 },
-  },
+  }
+};
+
+type ModelTypes = {
+  [x in ModelOptions]: ModelType;
+};
+
+// Types of input the model can support. If image, show an image upload button
+export const modelTypes: ModelTypes = {
+  'gpt-3.5-turbo': 'text',
+  'gpt-4-vision-preview': 'image'
 };
 
 export const defaultUserMaxToken = 4000;
@@ -157,7 +153,7 @@ export const generateDefaultChat = (
   title: title ? title : 'New Chat',
   messages:
     useStore.getState().defaultSystemMessage.length > 0
-      ? [{ role: 'system', content: useStore.getState().defaultSystemMessage }]
+      ? [{ role: 'system', content: [{type: 'text', text: useStore.getState().defaultSystemMessage} as TextContentInterface] }]
       : [],
   config: { ...useStore.getState().defaultChatConfig },
   titleSet: false,

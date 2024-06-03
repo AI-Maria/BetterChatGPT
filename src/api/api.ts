@@ -1,6 +1,9 @@
+import {modelTypes} from '@constants/chat';
 import { ShareGPTSubmitBodyInterface } from '@type/api';
-import { ConfigInterface, MessageInterface, ModelOptions } from '@type/chat';
+import { ConfigInterface, ImageContentInterface, MessageInterface, MessageInterfaceText, ModelOptions, TextContentInterface } from '@type/chat';
 import { isAzureEndpoint } from '@utils/api';
+
+
 
 export const getChatCompletion = async (
   endpoint: string,
@@ -43,14 +46,36 @@ export const getChatCompletion = async (
     }
   }
 
+  let body: BodyInit;
+
+  // make content: string if model support only text
+  if (modelTypes[config.model] == 'text') {
+      // Convert messages to MessageInterfaceText
+      const textMessages: MessageInterfaceText[] = messages.map(message => {
+          // Find the first text and ignore images
+          const textContent = message.content.find(content => content.type === 'text') as TextContentInterface;
+          return {
+              role: message.role,
+              content: textContent?.text || ''
+          };
+      });
+      body = JSON.stringify({
+          messages: textMessages,
+          ...config,
+          max_tokens: undefined,
+      });
+  } else {
+      body = JSON.stringify({
+          messages,
+          ...config,
+          max_tokens: undefined,
+      });
+  }
+
   const response = await fetch(endpoint, {
     method: 'POST',
     headers,
-    body: JSON.stringify({
-      messages,
-      ...config,
-      max_tokens: undefined,
-    }),
+    body: body,
   });
   if (!response.ok) throw new Error(await response.text());
 
@@ -96,15 +121,38 @@ export const getChatCompletionStream = async (
     }
   }
 
+  let body: BodyInit;
+
+  // make content: string if model support only text
+  if (modelTypes[config.model] == 'text') {
+      // Convert messages to MessageInterfaceText
+      const textMessages: MessageInterfaceText[] = messages.map(message => {
+          // Find the first text and ignore images
+          const textContent = message.content.find(content => content.type === 'text') as TextContentInterface;
+          return {
+              role: message.role,
+              content: textContent?.text || ''
+          };
+      });
+      body = JSON.stringify({
+          messages: textMessages,
+          ...config,
+          max_tokens: config.max_tokens,
+          stream: true,
+      });
+  } else {
+      body = JSON.stringify({
+          messages,
+          ...config,
+          max_tokens: config.max_tokens,
+          stream: true,
+      });
+  }
+
   const response = await fetch(endpoint, {
     method: 'POST',
     headers,
-    body: JSON.stringify({
-      messages,
-      ...config,
-      max_tokens: undefined,
-      stream: true,
-    }),
+    body: body,
   });
   if (response.status === 404 || response.status === 405) {
     const text = await response.text();
@@ -112,7 +160,7 @@ export const getChatCompletionStream = async (
     if (text.includes('model_not_found')) {
       throw new Error(
         text +
-          '\nMessage from Better ChatGPT:\nPlease ensure that you have access to the GPT-4 API!'
+        '\nMessage from Better ChatGPT:\nPlease ensure that you have access to the GPT-4 API!'
       );
     } else {
       throw new Error(
