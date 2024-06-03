@@ -5,6 +5,7 @@ import {
   ConfigInterface,
   FolderCollection,
   MessageInterface,
+  TextContentInterface,
 } from '@type/chat';
 import { roles } from '@type/chat';
 import {
@@ -102,7 +103,8 @@ export const convertOpenAIToBetterChatGPTFormat = (
     // Extract message if it exists
     if (node.message) {
       const { role } = node.message.author;
-      const content = node.message.content.parts?.join('') || '';
+      const text = node.message.content.parts?.join('') || '';
+      const content = [{'type': 'text', 'text': text} as TextContentInterface];
       if (content.length > 0) messages.push({ role, content });
     }
 
