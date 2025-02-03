@@ -64,20 +64,21 @@ export const limitMessageTokens = (
   }
 
   // Iterate through messages in reverse order, adding them to the limitedMessages array
-  // until the token limit is reached (excludes first message)
+  // until the token limit is reached (excludes the first message)
   for (let i = messages.length - 1; i >= 1; i--) {
     const count = countTokens([messages[i]], model);
     if (count + tokenCount > limit) break;
     tokenCount += count;
+    // unshift so that messages remain in their original order
     limitedMessages.unshift({ ...messages[i] });
   }
 
-  // Process first message
+  // Process the first message:
+  // If it's a system message and should be retained, always place it at the top.
   if (retainSystemMessage) {
-    // Insert the system message in the third position from the end
-    limitedMessages.splice(-3, 0, { ...messages[0] });
+    limitedMessages.unshift({ ...messages[0] });
   } else if (!isSystemFirstMessage) {
-    // Check if the first message (non-system) can fit within the limit
+    // For non-system messages, check if the first message can fit within the limit
     const firstMessageTokenCount = countTokens([messages[0]], model);
     if (firstMessageTokenCount + tokenCount < limit) {
       limitedMessages.unshift({ ...messages[0] });
